@@ -2,7 +2,7 @@
 {
     public class ConfigurationData
     {
-        public int QueryIntervalSecs { get; set; }
-        public List<KafkaAccessInformation> Clusters { get; set; }
+        public int QueryIntervalSecs { get; init; } = 30;
+        public List<KafkaAccessInformation>? Clusters { get; init; }
     }
 }
