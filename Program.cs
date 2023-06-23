@@ -22,9 +22,19 @@ using MeterProvider meterProvider = Sdk.CreateMeterProviderBuilder()
 
 var registy = new MeasurementRegistry();
 
-foreach (var kafkaAccessInformation in configurationData.Clusters)
+var timer = new PeriodicTimer(TimeSpan.FromSeconds(configurationData.QueryIntervalSecs));
+var periodicTask = Task.Run(async () =>
 {
-    await new KafkaProcessor(registy).ProcessAsync(kafkaAccessInformation);
-}
+    do
+    {
+        foreach (var kafkaAccessInformation in configurationData.Clusters)
+        {
+            await new KafkaProcessor(registy).ProcessAsync(kafkaAccessInformation);
+        }
+    }
+    while (await timer.WaitForNextTickAsync());
+});
 
 Console.ReadKey();
+timer.Dispose();
+await periodicTask;
