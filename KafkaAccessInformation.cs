@@ -4,7 +4,7 @@ namespace KafkaConsumerMetrics
 {
     public class KafkaAccessInformation
     {
-        public string Name { get; set; }
-        public ClientConfig Config { get; set; }
+        public string? Name { get; init; }
+        public ClientConfig? Config { get; init; }
     }
 }
