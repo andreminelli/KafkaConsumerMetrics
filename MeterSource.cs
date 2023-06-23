@@ -4,6 +4,7 @@ namespace KafkaConsumerMetrics
 {
     internal static class MeterSource
     {
-        internal static Meter Meter = new Meter("Contrib.KafkaConsumerMetrics");
+        internal const string Name = "Contrib.KafkaConsumerMetrics";
+        internal static Meter Meter = new Meter(Name);
     }
 }
