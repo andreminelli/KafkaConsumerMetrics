@@ -30,7 +30,9 @@ namespace KafkaConsumerMetrics
                 foreach (var groupPartitions in consumerOffsets.SelectMany(o => o.Partitions))
                 {
                     var waterMarkOffset = consumer.QueryWatermarkOffsets(groupPartitions.TopicPartition, TimeSpan.FromSeconds(1));
-                    _measurementRegistry.RegisterOffset(groupPartitions.Topic, waterMarkOffset.High.Value, group.GroupId, groupPartitions.Partition.Value, groupPartitions.Offset.Value);
+
+                    var data = new OffsetData(groupPartitions.Topic, waterMarkOffset.High.Value, group.GroupId, groupPartitions.Partition.Value, groupPartitions.Offset.Value);
+                    _measurementRegistry.RegisterOffset(data);
                 }
             }
         }

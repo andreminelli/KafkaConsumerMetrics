@@ -7,14 +7,15 @@ namespace KafkaConsumerMetrics
         static readonly ObservableGauge<long> consumerLag = MeterSource.Meter.CreateObservableGauge<long>("consumer-lag", GetMeasurements);
         static readonly Dictionary<string, Measurement<long>> data = new();
 
-        public void RegisterOffset(string topic, long topicCurrentOffset, string consumerGroupId, int partition, long consumerOffset)
+        public void RegisterOffset(OffsetData offsetData)
         {
-            Console.WriteLine($"Consumer {consumerGroupId} (in topic {topic}) lag in partition {partition}: {topicCurrentOffset - consumerOffset}");
-            data[$"{topic}-{consumerGroupId}-{partition}"] = new Measurement<long>(
-                topicCurrentOffset - consumerOffset,
-                new ("topic", topic),
-                new ("partition", partition),
-                new("consumerGroup", consumerGroupId)
+            Console.WriteLine($"Consumer {offsetData.ConsumerGroupId} (in topic {offsetData.Topic}) lag in partition {offsetData.Partition}: {offsetData.TopicCurrentOffset - offsetData.ConsumerOffset}");
+
+            data[$"{offsetData.Topic}-{offsetData.ConsumerGroupId}-{offsetData.Partition}"] = new Measurement<long>(
+                offsetData.TopicCurrentOffset - offsetData.ConsumerOffset,
+                new("topic", offsetData.Topic),
+                new("partition", offsetData.Partition),
+                new("consumerGroup", offsetData.ConsumerGroupId)
                 );
         }
 
