@@ -27,7 +27,7 @@ var periodicTask = Task.Run(async () =>
 {
     do
     {
-        foreach (var kafkaAccessInformation in configurationData.Clusters)
+        foreach (var kafkaAccessInformation in configurationData.Clusters!)
         {
             await new KafkaProcessor(registy).ProcessAsync(kafkaAccessInformation);
         }
