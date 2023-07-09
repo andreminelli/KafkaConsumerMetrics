@@ -20,6 +20,13 @@ using MeterProvider meterProvider = Sdk.CreateMeterProviderBuilder()
               })
               .Build() ?? throw new NullReferenceException("Can't configure metric exporting");
 
+var tcs = new TaskCompletionSource();
+Console.CancelKeyPress += (object? sender, ConsoleCancelEventArgs e) =>
+{
+	tcs.SetResult();
+	e.Cancel = true;
+};
+
 var registy = new MeasurementRegistry();
 
 var timer = new PeriodicTimer(TimeSpan.FromSeconds(configurationData.QueryIntervalSecs));
@@ -35,6 +42,8 @@ var periodicTask = Task.Run(async () =>
     while (await timer.WaitForNextTickAsync());
 });
 
-Console.ReadKey();
+Console.WriteLine("Press Ctrl+C to finish");
+
+await tcs.Task;
 timer.Dispose();
 await periodicTask;
