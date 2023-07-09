@@ -13,9 +13,10 @@ namespace KafkaConsumerMetrics
 
             data[$"{offsetData.Topic}-{offsetData.ConsumerGroupId}-{offsetData.Partition}"] = new Measurement<long>(
                 offsetData.TopicCurrentOffset - offsetData.ConsumerOffset,
-                new("topic", offsetData.Topic),
-                new("partition", offsetData.Partition),
-                new("consumerGroup", offsetData.ConsumerGroupId)
+				new("cluster-name", offsetData.ClusterName),
+				new("cluster-consumerGroup", offsetData.ConsumerGroupId),
+				new("topic-name", offsetData.Topic),
+                new("topic-partition", offsetData.Partition)
                 );
         }
 
